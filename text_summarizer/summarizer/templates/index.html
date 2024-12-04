@@ -4,18 +4,82 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text Summarizer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            padding: 20px;
+            margin: 0;
+        }
+        .content {
+            flex: 1;
+            margin-left: 220px;
+        }
+        .sidebar {
+            width: 200px;
+            background-color: #f4f4f4;
+            padding: 20px;
+            height: 100vh;
+            overflow-y: auto;
+            border-right: 2px solid #ddd;
+        }
+        .sidebar h2 {
+            text-align: center;
+        }
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .summary, .insights {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Upload a Text File and Provide a Prompt (Optional)</h1>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Upload and Summarize</button>
-    </form>
+    <div class="sidebar">
+        <h2>File History</h2>
+        <ul>
+            {% for entry in history %}
+            <li>
+                <strong>{{ entry.file_name }}</strong><br>
+                <small>{{ entry.timestamp }}</small>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="content">
+        <h1>Text Summarizer</h1>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Upload File</button>
+        </form>
 
-    {% if summary %}
-        <h2>Summary</h2>
-        <p>{{ summary }}</p>
-    {% endif %}
+        {% if error %}
+        <p style="color: red;">{{ error }}</p>
+        {% endif %}
+
+        {% if summary %}
+        <div class="summary">
+            <h2>Summary</h2>
+            <p>{{ summary }}</p>
+        </div>
+        {% endif %}
+
+        {% if insights %}
+        <div class="insights">
+            <h2>Key Insights</h2>
+            <ul>
+                {% for insight in insights %}
+                <li>{{ insight.text }} ({{ insight.label }})</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
 </body>
 </html>
