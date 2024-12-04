@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import FileHistory
 
-# Register your models here.
+@admin.register(FileHistory)
+class FileHistoryAdmin(admin.ModelAdmin):
+    list_display = ('file_name', 'user', 'timestamp')
+    search_fields = ('file_name', 'user__username')
