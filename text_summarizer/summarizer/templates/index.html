@@ -7,79 +7,305 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            display: flex;
-            padding: 20px;
+            background-color: #343541;
+            color: #d1d5db;
             margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
         }
+        
+        /* Sidebar styling */
+        .sidebar {
+            width: 280px;
+            background-color: #40414f;
+            border-right: 1px solid #52525d;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+        
+        /* Main content area */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        /* Content section */
         .content {
             flex: 1;
-            margin-left: 220px;
-        }
-        .sidebar {
-            width: 200px;
-            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
             padding: 20px;
-            height: 100vh;
-            overflow-y: auto;
-            border-right: 2px solid #ddd;
+            overflow-y: auto; /* Allow scrolling */
         }
+        
+        /* Apply the scrollbar styles */
+        .content::-webkit-scrollbar, 
+        .sidebar::-webkit-scrollbar {
+            width: 8px; /* Scrollbar width */
+            height: 8px; /* Horizontal scrollbar height */
+        }
+        
+        /* Scrollbar thumb (the draggable part) */
+        .content::-webkit-scrollbar-thumb, 
+        .sidebar::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.3); /* Semi-transparent thumb */
+            border-radius: 10px;
+        }
+        
+        /* Scrollbar track (background of the scrollbar) */
+        .content::-webkit-scrollbar-track, 
+        .sidebar::-webkit-scrollbar-track {
+            background-color: transparent; /* Transparent track */
+        }
+        
+        /* Hide scrollbar (while keeping scrollable areas) */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        
+        /* Other elements as you have them */
         .sidebar h2 {
+            color: #ffffff;
+            font-size: 18px;
+            margin-bottom: 20px;
             text-align: center;
         }
+        
         .sidebar ul {
-            list-style-type: none;
+            list-style: none;
             padding: 0;
         }
+        
         .sidebar ul li {
-            margin-bottom: 15px;
+            padding: 10px;
+            margin: 8px 0;
+            background-color: #52525d;
+            border-radius: 8px;
             text-align: center;
+            transition: background-color 0.2s ease;
+            cursor: pointer;
         }
+        
+        .sidebar ul li:hover {
+            background-color: #3f3f46;
+        }
+        
+        .form-container {
+            background-color: #40414f;
+            padding: 20px;
+            border-top: 1px solid #52525d;
+            box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .form-container form {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+        
+        .form-container textarea {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: #52525d;
+            color: #d1d5db;
+            resize: none;
+            height: 40px;
+        }
+        
+        .form-container button {
+            background-color: #10a37f;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .form-container button:hover {
+            background-color: #12856e;
+        }
+        
+        .upload-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: #52525d;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            color: #d1d5db;
+            font-size: 18px;
+            position: relative;
+        }
+        
+        .upload-button:hover {
+            background-color: #3f3f46;
+        }
+        
+        .upload-button input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .file-indicator {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #10a37f;
+            color: white;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 12px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .file-indicator.show {
+            display: flex;
+        }
+        
+        .file-indicator .file-icon {
+            font-size: 18px;
+            animation: rotate 1s ease-in-out infinite;
+        }
+        
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            50% {
+                transform: rotate(180deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
         .summary, .insights {
+            background-color: #40414f;
+            padding: 20px;
+            border-radius: 8px;
             margin-top: 20px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
         }
+        
+        .summary h2, .insights h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+        
+        .insights ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .insights ul li {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #52525d;
+            border-radius: 8px;
+        }
+        
     </style>
 </head>
 <body>
     <div class="sidebar">
-        <h2>File History</h2>
-        <ul>
-            {% for entry in history %}
-            <li>
-                <strong>{{ entry.file_name }}</strong><br>
-                <small>{{ entry.timestamp }}</small>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
-    <div class="content">
-        <h1>Text Summarizer</h1>
-        <form method="POST" enctype="multipart/form-data">
+        <h2>File History &#128203;</h2>
+        <form method="POST">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Upload File</button>
-        </form>
-
-        {% if error %}
-        <p style="color: red;">{{ error }}</p>
-        {% endif %}
-
-        {% if summary %}
-        <div class="summary">
-            <h2>Summary</h2>
-            <p>{{ summary }}</p>
-        </div>
-        {% endif %}
-
-        {% if insights %}
-        <div class="insights">
-            <h2>Key Insights</h2>
             <ul>
-                {% for insight in insights %}
-                <li>{{ insight.text }} ({{ insight.label }})</li>
+                {% for entry in history %}
+                <li>
+                    <label>
+                        <input type="checkbox" name="history_ids" value="{{ entry.id }}">
+                        <strong>{{ entry.file_name }}</strong><br>
+                        <small>{{ entry.timestamp }}</small>
+                    </label>
+                </li>
                 {% endfor %}
             </ul>
-        </div>
-        {% endif %}
+           
+        </form>
     </div>
+    
+    <div class="main-content">
+        <div class="content">
+            <h1>Text Summarizer &#128221;</h1>
+
+            {% if error %}
+            <p style="color: #f87171;">{{ error }}</p>
+            {% endif %}
+
+            {% if summary %}
+            <div class="summary">
+                <h2>Summary &#x1F4DA;</h2>
+                <p>{{ summary }}</p>
+            </div>
+            {% endif %}
+
+            {% if insights %}
+            <div class="insights">
+                <h2>Key Insights &#x1F4C8;</h2>
+                <ul>
+                    {% for insight in insights %}
+                    <li>{{ insight.text }} ({{ insight.label }})</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+        <div class="form-container">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="upload-button">
+                    &#128194; <!-- Unicode for a file icon -->
+                    <input type="file" name="file" title="Upload File" onchange="showFileIndicator()">
+                    <div class="file-indicator" id="file-indicator">
+                        <span class="file-icon">&#128196;</span> <!-- Unicode for file icon -->
+                    </div>
+                </div>
+                <textarea id="custom-prompt" name="prompt" placeholder="Enter your custom prompt here..."></textarea>
+                <button type="submit">Submit</button>
+                <button type="submit" style="background-color: #10a37f; color: white; padding: 10px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;height:36px;"title="Combine and Summarize">🔗</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showFileIndicator() {
+            const indicator = document.getElementById('file-indicator');
+            if (indicator) {
+                indicator.classList.add('show');
+            }
+        }
+    </script>
 </body>
 </html>
